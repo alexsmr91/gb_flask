@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block user_active %}active" aria-current="page"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<ul>
+{% for id in users %}
+<li>
+    <a href="{{url_for('user.user_detail', pk=id)}}" class="link-warning">
+        {{ users[id].name }} {{ users[id].surname }}
+    </a>
+</li>
+{% endfor %}
+</ul>
+</div>
+
+{% endblock %}

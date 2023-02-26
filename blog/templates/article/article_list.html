@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Статьи{% endblock %}
+
+{% block article_active %}active" aria-current="page"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<ul>
+{% for id in articles %}
+<li><a href="{{url_for('article.article_detail', pk=id)}}" class="link-warning">{{ articles[id].name }}</a></li>
+{% endfor %}
+</ul>
+</div>
+
+{% endblock %}

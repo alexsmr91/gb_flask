@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %} Register new user {% endblock %}
+
+{% block body %}
+<h1>Register new user:</h1>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+
+<form method="POST" action="{{ url_for('auth.register') }}">
+    <div class="form-group">
+        <label for="exampleInputUsername">Имя пользователя</label>
+        <input type="text" name="username" class="form-control" id="exampleInputUsername" aria-describedby="usernameHelp"
+               placeholder="Введите имя пользователя">
+    </div>
+     <div class="form-group">
+        <label for="exampleInputEmail">Почта</label>
+        <input type="email" name="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
+               placeholder="Введите email">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Пароль</label>
+        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Пароль">
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Зарегистрироваться</button>
+</form>
+<p>
+<p>или</p>
+<p>
+<a class="link" href={{ url_for('auth.login') }}>Войти</a>
+{% endblock %}

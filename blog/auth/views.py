@@ -59,3 +59,7 @@ def logout():
     logout_user()
     return render_template("auth/login.html")
 
+
+@auth.route("/")
+def index():
+    return redirect(url_for("article.article_list"))

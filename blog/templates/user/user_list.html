@@ -8,10 +8,10 @@
 
 <div class="container">
 <ul>
-{% for id in users %}
+{% for user in users %}
 <li>
-    <a href="{{url_for('user.user_detail', pk=id)}}" class="link-warning">
-        {{ users[id].name }} {{ users[id].surname }}
+    <a href="{{url_for('user.user_detail', pk=user.id)}}" class="link-warning">
+        {{ user.username }} - {{ user.email }}
     </a>
 </li>
 {% endfor %}

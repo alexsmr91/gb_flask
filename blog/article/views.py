@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 from werkzeug.exceptions import NotFound
 from blog.models.database import db
-from blog.models import Author, Article
+from blog.models import Author, Article, Tag
 from blog.forms.article import CreateArticleForm
 
 
@@ -18,7 +19,7 @@ def articles_list():
 
 @article.route("/<int:article_id>/", endpoint="details")
 def article_detals(article_id):
-    articles = Article.query.filter_by(id=article_id).one_or_none()
+    articles = Article.query.filter_by(id=article_id).options(joinedload(Article.tags)).one_or_none()
     if article is None:
         raise NotFound
     return render_template("article/article_detail.html", article=articles)
@@ -29,14 +30,17 @@ def article_detals(article_id):
 def create_article():
     error = None
     form = CreateArticleForm(request.form)
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by("name")]
     if request.method == "POST" and form.validate_on_submit():
         articles = Article(title=form.title.data.strip(), body=form.body.data)
+        if form.tags.data:
+            selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
+            for tag in selected_tags:
+                articles.tags.append(tag)
         db.session.add(articles)
         if current_user.author:
-            # use existing author if present
             articles.author = current_user.author
         else:
-            # otherwise create author record
             author = Author(user_id=current_user.id)
             db.session.add(author)
             db.session.flush()

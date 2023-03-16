@@ -3,20 +3,20 @@ from werkzeug.exceptions import Unauthorized
 from flask_login import login_required, current_user
 from blog.models import User
 
-user = Blueprint('user', __name__)
+users = Blueprint('users', __name__)
 
 
-@user.route('/')
+@users.route('/')
 @login_required
 def user_list():
     if current_user.is_staff:
-        users = User.query.all()
-        return render_template('user/user_list.html', users=users)
+        data = User.query.all()
+        return render_template('user/user_list.html', users=data)
     else:
         return user_detail(current_user.id)
 
 
-@user.route('/<int:pk>')
+@users.route('/<int:pk>')
 @login_required
 def user_detail(pk: int):
     one_user = None

@@ -32,7 +32,7 @@ def login():
         if user is None or not user.validate_password(password):
             return render_template("auth/login.html", form=form, error=f"Check login information")
         login_user(user)
-        return redirect(url_for("user.user_detail", pk=user.id))
+        return redirect(url_for("users.user_detail", pk=user.id))
     return render_template("auth/login.html", form=form, error=error)
 
 
@@ -79,4 +79,4 @@ def logout():
 
 @auth.route("/")
 def index():
-    return redirect(url_for("article.article_list"))
+    return redirect(url_for("articles.list"))

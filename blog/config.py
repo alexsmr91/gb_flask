@@ -10,6 +10,7 @@ class BaseConfig:
     DEBUG = os.environ.get("DEBUG", False)
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    WTF_CSRF_ENABLED = True
 
 
 class DevConfig(BaseConfig):

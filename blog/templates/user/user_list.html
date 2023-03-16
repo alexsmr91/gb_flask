@@ -10,7 +10,7 @@
 <ul>
 {% for user in users %}
 <li>
-    <a href="{{url_for('user.user_detail', pk=user.id)}}" class="link-warning">
+    <a href="{{url_for('users.user_detail', pk=user.id)}}" class="link-warning">
         {{ user.username }} - {{ user.email }}
     </a>
 </li>

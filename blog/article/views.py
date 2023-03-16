@@ -1,29 +1,51 @@
-from flask import Blueprint, render_template
-
-article = Blueprint('article', __name__)
-
-
-ARTICLES = {
-    1: {
-        "name": "What is Lorem Ipsum?",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. "
-    },
-    2: {
-        "name": "Where does it come from?",
-        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. "
-    },
-    3: {
-        "name": "Why do we use it?",
-        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. "
-    }
-}
+from flask import Blueprint, render_template, request, current_app, redirect, url_for
+from flask_login import login_required, current_user
+from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import NotFound
+from blog.models.database import db
+from blog.models import Author, Article
+from blog.forms.article import CreateArticleForm
 
 
-@article.route('/')
-def article_list():
-    return render_template('article/article_list.html', articles=ARTICLES)
+article = Blueprint("articles", __name__)
 
 
-@article.route('/<int:pk>')
-def article_detail(pk: int):
-    return render_template('article/article_detail.html', article=ARTICLES[pk])
+@article.route("/", endpoint="list")
+def articles_list():
+    articles = Article.query.all()
+    return render_template("article/article_list.html", articles=articles)
+
+
+@article.route("/<int:article_id>/", endpoint="details")
+def article_detals(article_id):
+    articles = Article.query.filter_by(id=article_id).one_or_none()
+    if article is None:
+        raise NotFound
+    return render_template("article/article_detail.html", article=articles)
+
+
+@article.route("/create/", methods=["GET", "POST"], endpoint="create")
+@login_required
+def create_article():
+    error = None
+    form = CreateArticleForm(request.form)
+    if request.method == "POST" and form.validate_on_submit():
+        articles = Article(title=form.title.data.strip(), body=form.body.data)
+        db.session.add(articles)
+        if current_user.author:
+            # use existing author if present
+            articles.author = current_user.author
+        else:
+            # otherwise create author record
+            author = Author(user_id=current_user.id)
+            db.session.add(author)
+            db.session.flush()
+            articles.author = author.id
+        try:
+            db.session.commit()
+        except IntegrityError:
+            current_app.logger.exception("Could not create a new article!")
+            error = "Could not create article!"
+        else:
+            return redirect(url_for("articles.details", article_id=articles.id))
+    return render_template("article/article_create.html", form=form, error=error)

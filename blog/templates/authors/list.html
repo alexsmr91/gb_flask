@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Authors list{% endblock %}
+{% block author_active %}active" aria-current="page"{% endblock %}
+{% block body %}
+    <h1>Авторы</h1>
+    <div>
+        {% if authors %}
+            <ul>
+                {% for author in authors %}
+                    <li>
+                        #{{ author.id }} ({{ author.user.username }})
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h3>Пока нет ни одного автора</h3>
+        {% endif %}
+    </div>
+{% endblock %}

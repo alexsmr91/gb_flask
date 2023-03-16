@@ -18,11 +18,11 @@ services:
     build:
       context: .
     ports:
-      - 80:5000
+      - 80:80
     command: bash -c "
       flask init-db
-      && flask create-users
-      && flask run --host=0.0.0.0
+      && flask create-admin
+      && flask run --host=0.0.0.0 --port=80
       "
     depends_on:
       db:

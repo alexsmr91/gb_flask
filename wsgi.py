@@ -1,6 +1,6 @@
+import os
 from blog.app import create_app
 from blog.models.database import db
-from werkzeug.security import generate_password_hash
 
 
 app = create_app()
@@ -19,21 +19,19 @@ def init_db():
         print(error)
 
 
-@app.cli.command("create-users")
-def create_users():
+@app.cli.command("create-admin")
+def create_admin():
     """
     Run in your terminal:
-    flask create-users
-    > done! created users: <User #1 'admin'> <User #2 'user'>
+    ➜ flask create-admin
+    > created admin: <User #1 'admin'>
     """
     from blog.models import User
-    admin = User(username="admin", is_staff=True, password=generate_password_hash("qwe123"), email="a@dm.in")
-    user = User(username="user", password=generate_password_hash("qwe123"), email="b@dm.in")
+    admin = User(username="admin", is_staff=True)
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "qwe123"
     try:
         db.session.add(admin)
-        db.session.add(user)
         db.session.commit()
-        print("Done! created users:", admin, user)
+        print("created admin:", admin)
     except Exception as error:
         print(error)
-

@@ -6,7 +6,7 @@ from blog.models import db
 from blog.auth import auth
 from blog.auth import login_manager
 from flask_migrate import Migrate
-
+from blog.authors.views import authors_app
 
 
 def create_app(config_class=DevConfig) -> Flask:
@@ -22,4 +22,5 @@ def create_app(config_class=DevConfig) -> Flask:
 def register_blueprints(app: Flask):
     app.register_blueprint(article,  url_prefix='/article')
     app.register_blueprint(user, url_prefix='/user')
+    app.register_blueprint(authors_app, url_prefix="/authors")
     app.register_blueprint(auth)

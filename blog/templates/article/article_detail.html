@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-
-{% block title %}Статья - {{ article.name }} {% endblock %}
-
+{% block title %}
+    Статья #{{ article.id }}: {{ article.title }}
+{% endblock %}
 {% block article_active %}active" aria-current="page"{% endblock %}
-
 {% block body %}
-<div class="container">
-<h1> {{ article.name }} </h1>
-{{ article.description }}
-</div>
+    <h1>{{ article.title }}</h1>
+    <div>
+        <p class="text-justify">{{ article.body }}</p>
+        <div>Published {{ article.dt_created }}</div>
+        <div>by {{ article.author.user.username }}</div>
+    </div>
 {% endblock %}

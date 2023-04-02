@@ -8,7 +8,7 @@ from blog.auth import login_manager
 from flask_migrate import Migrate
 from blog.authors.views import authors_app
 from blog.admin import admin
-
+from blog.api import init_api
 
 
 def create_app(config_class=DevConfig) -> Flask:
@@ -18,6 +18,7 @@ def create_app(config_class=DevConfig) -> Flask:
     migrate = Migrate(app, db, compare_type=True)
     login_manager.init_app(app)
     admin.init_app(app)
+    api = init_api(app)
     register_blueprints(app)
     return app
 

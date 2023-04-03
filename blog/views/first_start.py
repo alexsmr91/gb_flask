@@ -9,3 +9,4 @@ first_start = Blueprint("first_start", __name__)
 def first_start_view():
     os.system("flask init_db | flask create-admin | flask create-tags")
     return render_template("article/article_list.html")
+

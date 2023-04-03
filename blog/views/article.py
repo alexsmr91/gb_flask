@@ -47,14 +47,14 @@ def create_article():
             selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
             for tag in selected_tags:
                 articles.tags.append(tag)
-        db.session.add(articles)
         if current_user.author:
             articles.author = current_user.author
         else:
             author = Author(user_id=current_user.id)
             db.session.add(author)
             db.session.flush()
-            articles.author = author.id
+            articles.author_id = author.id
+        db.session.add(articles)
         try:
             db.session.commit()
         except IntegrityError:

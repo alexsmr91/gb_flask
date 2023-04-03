@@ -1,12 +1,12 @@
 from flask import Flask
-from blog.config import BaseConfig, DevConfig, TestingConfig
-from blog.article.views import article
-from blog.user.views import users
+from blog.config import DevConfig
+from blog.views.article import article
+from blog.views.user import users
 from blog.models import db
 from blog.auth import auth
 from blog.auth import login_manager
 from flask_migrate import Migrate
-from blog.authors.views import authors_app
+from blog.views.author import authors_app
 from blog.admin import admin
 from blog.api import init_api
 

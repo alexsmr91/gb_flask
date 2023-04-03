@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Статьи{% endblock %}
+
+{% block article_active %}active" aria-current="page"{% endblock %}
+
+{% block body %}
+
+    <div>
+        <ul>
+        {% for article in articles %}
+            <li>
+                <a href="{{ url_for('articles.details', article_id=article.id) }}">{{ article.attributes.title }}</a>
+                edited at {{ article.attributes.dt_updated }}
+            </li>
+        {% endfor %}
+        </ul>
+        <hr>
+        <a href="{{ url_for('articles.create') }}">Создать новую статью</a>
+
+    </div>
+
+{% endblock %}
+
+

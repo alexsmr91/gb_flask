@@ -49,3 +49,12 @@ def create_tags():
         db.session.add(tag)
         db.session.commit()
     print("created tags")
+
+
+FIRST = os.environ.get("FIRST", False)
+
+if FIRST:
+    init_db()
+    create_admin()
+    create_tags()
+    os.environ.setdefault("FIRST", "0")

@@ -1,5 +1,5 @@
 from flask import Flask
-from blog.config import DevConfig
+from blog.config import DevConfig, BaseConfig
 from blog.views.article import article
 from blog.views.user import users
 from blog.models import db
@@ -7,11 +7,12 @@ from blog.auth import auth
 from blog.auth import login_manager
 from flask_migrate import Migrate
 from blog.views.author import authors_app
+from blog.views.first_start import first_start
 from blog.admin import admin
 from blog.api import init_api
 
 
-def create_app(config_class=DevConfig) -> Flask:
+def create_app(config_class=BaseConfig) -> Flask:
     app = Flask(__name__, static_folder="static")
     app.config.from_object(config_class)
     db.init_app(app)
@@ -27,4 +28,5 @@ def register_blueprints(app: Flask):
     app.register_blueprint(article,  url_prefix='/article')
     app.register_blueprint(users, url_prefix='/user')
     app.register_blueprint(authors_app, url_prefix="/authors")
+    app.register_blueprint(first_start, url_prefix="/first_start")
     app.register_blueprint(auth)

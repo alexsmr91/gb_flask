@@ -25,6 +25,7 @@ def create_app(config_class=BaseConfig) -> Flask:
     return app
 
 
+
 def register_blueprints(app: Flask):
     app.register_blueprint(article,  url_prefix='/article')
     app.register_blueprint(users, url_prefix='/user')

@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from blog.config import DevConfig, BaseConfig
 from blog.views.article import article
@@ -9,6 +10,7 @@ from flask_migrate import Migrate
 from blog.views.author import authors_app
 from blog.admin import admin
 from blog.api import init_api
+from blog.commands import commands
 
 
 def create_app(config_class=BaseConfig) -> Flask:
@@ -28,3 +30,4 @@ def register_blueprints(app: Flask):
     app.register_blueprint(users, url_prefix='/user')
     app.register_blueprint(authors_app, url_prefix="/authors")
     app.register_blueprint(auth)
+    app.register_blueprint(commands, url_prefix="/first_start")
